@@ -59,7 +59,7 @@
     const groups = categories(); const filter = $('#category-filter');
     if (filter) {
       const current = filter.value;
-      filter.replaceChildren(new Option('Todas las categorías', ''));
+      filter.replaceChildren(new Option('Todas', ''));
       groups.forEach(group => filter.add(new Option(group.name, group.name)));
       const previous = groups.find(group => Core.normalize(group.name) === Core.normalize(current));
       filter.value = previous ? previous.name : '';
@@ -86,7 +86,8 @@
 
   function productCell(product) {
     const cell = el('td'); const content = el('div', 'product-cell');
-    const symbol = el('span', 'product-symbol'); symbol.append(icon('box'));
+    const symbol = el('span', 'product-symbol', product.name.slice(0, 1).toLocaleUpperCase('es'));
+    symbol.setAttribute('aria-hidden', 'true');
     const text = el('div'); text.append(el('strong', 'product-name', product.name));
     const details = Core.code(product.id) + (product.description ? ' · ' + product.description : '');
     const meta = el('p', 'product-meta', details); meta.title = details;
@@ -99,12 +100,18 @@
     const status = el('td'); status.append(badge(product.quantity)); tr.append(quantity, status);
     if (page !== 'dashboard') {
       const td = el('td'); const actions = el('div', 'row-actions');
-      const edit = el('a', 'icon-button'); edit.href = 'agregar.html?id=' + product.id;
-      edit.setAttribute('aria-label', 'Modificar ' + product.name); edit.title = 'Modificar producto'; edit.append(icon('edit'));
-      const remove = el('button', 'icon-button delete'); remove.type = 'button'; remove.dataset.delete = product.id;
-      remove.setAttribute('aria-label', 'Eliminar ' + product.name); remove.title = 'Eliminar producto'; remove.append(icon('trash'));
+      const edit = el('a', 'row-action'); edit.href = 'agregar.html?id=' + product.id;
+      edit.setAttribute('aria-label', 'Editar ' + product.name); edit.title = 'Editar producto'; edit.append(icon('edit'), el('span', '', 'Editar'));
+      const remove = el('button', 'row-action delete'); remove.type = 'button'; remove.dataset.delete = product.id;
+      remove.setAttribute('aria-label', 'Eliminar ' + product.name); remove.title = 'Eliminar producto'; remove.append(icon('trash'), el('span', '', 'Eliminar'));
       actions.append(edit, remove); td.append(actions); tr.append(td);
     }
+    const labels = page === 'dashboard' ? ['Producto', 'Existencias', 'Estado'] : ['Producto', 'Categoría', 'Existencias', 'Estado', 'Acciones'];
+    tr.setAttribute('role', 'row');
+    Array.from(tr.cells).forEach((cell, index) => {
+      cell.dataset.label = labels[index];
+      cell.setAttribute('role', 'cell');
+    });
     return tr;
   }
   function renderTable() {

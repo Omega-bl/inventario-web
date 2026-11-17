@@ -2,6 +2,12 @@
 
 Actividad 4.4 de Aplicaciones Web. El proyecto conserva las tres páginas de la práctica anterior y agrega la administración del inventario con JavaScript.
 
+## Diseño y uso
+
+La interfaz usa negro carbón, blanco cálido y rojo. El menú está en la parte superior. Los campos tienen letra de 16 px y las acciones de producto incluyen texto y un área de al menos 44 px de alto.
+
+En computadoras se muestra una tabla. En tabletas y celulares los productos se acomodan en tarjetas con los botones Editar y Eliminar visibles. El formulario y las confirmaciones también se ajustan al ancho disponible. Se respeta la preferencia de reducir movimiento del navegador.
+
 ## Funciones
 
 - Agregar productos con nombre, categoría, cantidad y descripción opcional.
